@@ -31,11 +31,15 @@ export class PostsService {
   addPost(title: string, content: string) {
     const post: Post = { title: title, content: content };
 
-    // this.http.post();
-    this.posts.push(post);
+    this.http
+      .post<{ message: string }>('http://localhost:3000/api/posts', post)
+      .subscribe((responseData) => {
+        console.log(responseData);
+        this.posts.push(post);
 
-    // this is an Observable:
-    this.postsUpdated.next([...this.posts]);
-    // the next() method is called on the Subject (postsUpdated) inside post-list component onInit.
+        // this is an Observable:
+        this.postsUpdated.next([...this.posts]);
+        // the next() method is called on the Subject (postsUpdated) inside post-list component onInit.
+      });
   }
 }
