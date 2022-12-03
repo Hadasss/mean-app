@@ -9,7 +9,7 @@ const app = express();
 
 mongoose
   .connect(
-    `mongodb+srv://hadas:${process.env.MONGO_PASSWORD}@cluster0.rv87pjx.mongodb.net/?retryWrites=true&w=majority`
+    `mongodb+srv://hadas:${process.env.MONGO_PASSWORD}@node-angular.rv87pjx.mongodb.net/?retryWrites=true&w=majority`
   )
   .then(() => {
     console.log("Connected to DB!");
@@ -32,6 +32,17 @@ app.use((req, res, next) => {
   next();
 });
 
+// GET all posts
+app.get("/api/posts", (req, res, next) => {
+  Post.find().then((documents) => {
+    res.status(200).json({
+      message: "Posts sent successfully",
+      posts: documents,
+    });
+  });
+});
+
+// POST
 app.post("/api/posts", (req, res, next) => {
   const post = new Post({
     title: req.body.title,
@@ -39,25 +50,6 @@ app.post("/api/posts", (req, res, next) => {
   });
   post.save();
   res.status(201).json({ message: "post added successfully" });
-});
-
-app.get("/api/posts", (req, res, next) => {
-  const posts = [
-    {
-      id: "k238o9dhg",
-      title: "First server side post",
-      content: "This is coming from th server!",
-    },
-    {
-      id: "ls343459fs",
-      title: "Second server side post",
-      content: "This is also coming from th server!",
-    },
-  ];
-  res.status(200).json({
-    message: "Posts sent successfully",
-    posts: posts,
-  });
 });
 
 module.exports = app;
