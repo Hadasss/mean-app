@@ -13,7 +13,7 @@ export class PostsService {
   getPosts() {
     this.http
       .get<{ message: string; posts: Post[] }>(
-        'http//:localhost:3000/api/posts'
+        'http://localhost:3000/api/posts'
       )
       .subscribe((postData) => {
         this.posts = postData.posts;
@@ -30,6 +30,8 @@ export class PostsService {
 
   addPost(title: string, content: string) {
     const post: Post = { title: title, content: content };
+
+    // this.http.post();
     this.posts.push(post);
 
     // this is an Observable:
