@@ -1,7 +1,20 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
+require("dotenv").config();
+
+const Post = require("./models/post");
 
 const app = express();
+
+mongoose
+  .connect(
+    `mongodb+srv://hadas:${process.env.MONGO_PASSWORD}@cluster0.rv87pjx.mongodb.net/?retryWrites=true&w=majority`
+  )
+  .then(() => {
+    console.log("Connected to DB!");
+  })
+  .catch((error) => console.log(error));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -20,8 +33,11 @@ app.use((req, res, next) => {
 });
 
 app.post("/api/posts", (req, res, next) => {
-  const post = req.body;
-  console.log(post);
+  const post = new Post({
+    title: req.body.title,
+    content: req.body.content,
+  });
+  post.save();
   res.status(201).json({ message: "post added successfully" });
 });
 
