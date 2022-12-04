@@ -44,9 +44,16 @@ export class PostsService {
     const post: Post = { id: null || '', title: title, content: content };
 
     this.http
-      .post<{ message: string }>('http://localhost:3000/api/posts', post)
+      .post<{ message: string; postId: string }>(
+        'http://localhost:3000/api/posts',
+        post
+      )
       .subscribe((responseData) => {
         console.log(responseData);
+        // fetch the updated post id that was assigned by mongoose from the db and update it in the post object in the array:
+        const id = responseData.postId;
+        // then, assign the mongoose id value to the id property that we defined for this newly created object:
+        post.id = id;
         this.posts.push(post);
 
         // this is an Observable:
@@ -61,8 +68,12 @@ export class PostsService {
       .delete(`http://localhost:3000/api/posts/${postId}`)
       .subscribe(() => {
         console.log('deleted!');
-        // TODO render updated post list
-        this.getPosts();
+        // render updated post list
+        // this.getPosts();
+        // this.getPosts()>>>> not a good solution because it makes another API call, when I don't need to fetch new data!
+        const updatedPosts = this.posts.filter((post) => post.id !== postId);
+        this.posts = updatedPosts;
+        this.postsUpdated.next([...this.posts]);
       });
   }
 }

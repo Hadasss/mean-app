@@ -48,8 +48,13 @@ app.post("/api/posts", (req, res, next) => {
     title: req.body.title,
     content: req.body.content,
   });
-  post.save();
-  res.status(201).json({ message: "post added successfully" });
+  post.save().then((createdPost) => {
+    console.log(createdPost);
+    res
+      .status(201)
+      .json({ message: "post added successfully", postId: createdPost._id });
+    // ^ added a property to update the id assigned by mongoose upon post creation
+  });
 });
 
 // DELETE one
