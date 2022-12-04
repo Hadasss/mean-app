@@ -54,4 +54,15 @@ export class PostsService {
         // the next() method is called on the Subject (postsUpdated) inside post-list component onInit.
       });
   }
+
+  deletePost(postId: string) {
+    // remove post from posts array on the frontend
+    this.http
+      .delete(`http://localhost:3000/api/posts/${postId}`)
+      .subscribe(() => {
+        console.log('deleted!');
+        // TODO render updated post list
+        this.getPosts();
+      });
+  }
 }

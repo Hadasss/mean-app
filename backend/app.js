@@ -52,4 +52,14 @@ app.post("/api/posts", (req, res, next) => {
   res.status(201).json({ message: "post added successfully" });
 });
 
+// DELETE one
+app.delete("/api/posts/:id", (req, res, next) => {
+  console.log(req.params.id);
+
+  Post.deleteOne({ _id: req.params.id }).then((result) => {
+    console.log(result);
+    res.status(200).json({ message: "deleted post" });
+  });
+});
+
 module.exports = app;

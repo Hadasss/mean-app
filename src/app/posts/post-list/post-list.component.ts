@@ -23,6 +23,14 @@ export class PostListComponent implements OnInit, OnDestroy {
       });
   }
 
+  onDelete(postId: string) {
+    // get post object from click event
+    console.log(postId);
+    // TODO refer to function on the backend to with the id
+
+    this.postsService.deletePost(postId);
+  }
+
   // to remove subscriptions and prevent memory leaks - OnDestroy() is called when the component is about to be removed from the DOM.
   ngOnDestroy() {
     this.postsSub.unsubscribe();
